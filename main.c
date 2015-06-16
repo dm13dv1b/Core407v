@@ -125,24 +125,6 @@ static const ShellConfig shell_cfg1 = {
 };
 
 /*
- * This is a periodic thread that does absolutely nothing except flashing
- * a LED.
- */
-static WORKING_AREA(waThread1, 128);
-static msg_t Thread1(void *arg) {
-
-  (void)arg;
-  chRegSetThreadName("blinker");
-  while (TRUE) {
-    palSetPad(GPIOD, GPIOD_LED3);       /* Orange.  */
-    chThdSleepMilliseconds(500);
-    palClearPad(GPIOD, GPIOD_LED3);     /* Orange.  */
-    chThdSleepMilliseconds(500);
-  }
-  return 0;
-}
-
-/*
  * Application entry point.
  */
 int main(void) {
@@ -164,11 +146,6 @@ int main(void) {
   sdStart(&SD2, NULL);
   palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));
   palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7));
-
-  /*
-   * Creates the example thread.
-   */
-  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
   /*
    * Shell manager initialization.
